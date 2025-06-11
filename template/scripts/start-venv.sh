@@ -9,6 +9,7 @@ if [ ! -d "./venv" ]; then
 
 
     ########### set packets ###########
+    echo "Warning: scripts/start-venv.sh not set pip packets"
     #pip install ultralytics
     ########### set packets ###########
 fi

@@ -5,14 +5,11 @@ from ultralytics import YOLO
 
 parser = argparse.ArgumentParser(description='Convert pytorch to onnx')
 parser.add_argument('--model_path', type=str, required=True)
-
 args = parser.parse_args()
-
 
 model_dir_path = str(Path(args.model_path).parent)
 
-
-
+print(args.model_path)
 # Load the YOLO11 model
 model = YOLO(args.model_path)
 
