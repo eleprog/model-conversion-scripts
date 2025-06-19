@@ -17,7 +17,7 @@ model = YOLO(args.model_path)
 model.export(format="onnx")  # creates 'yolo11n.onnx'
 
 # Load the exported ONNX model
-onnx_model = YOLO(model_dir_path + "/yolo11s-visdrone.onnx")
+#onnx_model = YOLO(model_dir_path + "/yolo11s-visdrone.onnx")
 
 # Run inference
-results = onnx_model("https://ultralytics.com/images/bus.jpg",  save=True)
+#results = onnx_model("https://ultralytics.com/images/bus.jpg",  save=True)

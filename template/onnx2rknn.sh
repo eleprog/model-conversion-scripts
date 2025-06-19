@@ -1,10 +1,16 @@
 #!/bin/bash
 set -e
 
-. scripts/start-venv.sh
+CONVERTER_NAME=$(basename "$0" .sh)
+CONVERTER_DIR="./converters"
 
-for file in models/*.onnx; do
-    python ./converters/onnx2rknn/onnx2rknn.py --model_path $file
-done
+if [ ! -f "$CONVERTER_DIR/$CONVERTER_NAME/convert.sh" ]; then
+    echo "Конвертера $CONVERTER_NAME в директории $CONVERTER_DIR не найдено"
+    exit 1
+fi
+
+pushd "$CONVERTER_DIR/$CONVERTER_NAME"
+    /bin/bash convert.sh
+popd
 
 exit 0
