@@ -4,6 +4,13 @@ from models import *
 import torch
 import torch.onnx
 
+######################### PARAMETERS #########################
+
+duration = 5
+classes_num = 3
+batch_size = 1
+
+##############################################################
 
 parser = argparse.ArgumentParser(description='Convert pytorch to onnx')
 
@@ -16,9 +23,6 @@ parser.add_argument('--fmax', type=int, default=14000)
 parser.add_argument('--model_type', type=str, required=True)
 parser.add_argument('--model_path', type=str, required=True)
 #parser.add_argument('--audio_path', type=str, required=True)
-
-
-
 args = parser.parse_args()
 
 
@@ -36,9 +40,6 @@ model_path = args.model_path
 device = torch.device('cpu')
 
 
-
-classes_num = 3
-
 # Model
 Model = eval(model_type)
 model = Model(sample_rate=sample_rate, window_size=window_size, 
@@ -50,24 +51,36 @@ model.load_state_dict(checkpoint['model'])
 
 
 
+# export to ONNX
+if batch_size < 1:
+    dummy_input = torch.randn(1, sample_rate * duration)
+    torch.onnx.export(
+        model,
+        dummy_input,
+        model_path.replace(".pth", ".onnx"),
+        export_params=True,
+        opset_version=13,
+        do_constant_folding=True,
+        input_names=["input"],
+        output_names=["output"],
+        dynamic_axes={
+            "input": {0: "batch_size"},  # Динамический размер батча
+            "output": {0: "batch_size"}
+        }
+    )
+else:
+    dummy_input = torch.randn(batch_size, sample_rate * duration)
+    torch.onnx.export(
+        model,
+        dummy_input,
+        model_path.replace(".pth", ".onnx"),
+        export_params=True,
+        opset_version=13,
+        do_constant_folding=True,
+        input_names=["input"],
+        output_names=["output"],
+    )
 
-# Создайте dummy-вход (размер зависит от архитектуры вашей модели)
-#dummy_input = torch.randn(1, 1, sample_rate - (1024 // 2) * 2)  
-dummy_input = torch.randn(1, sample_rate)
 
-# Экспорт в ONNX
-torch.onnx.export(
-    model,
-    dummy_input,
-    "model.onnx",
-    export_params=True,  # Сохранить веса в модели
-    opset_version=13,    # Версия ONNX операторов
-    do_constant_folding=True,  # Оптимизация констант
-    input_names=["input"],     # Имена входных узлов
-    output_names=["output"],   # Имена выходных узлов
-    dynamic_axes={
-        "input": {0: "batch_size"},  # Динамический размер батча
-        "output": {0: "batch_size"}
-    }
-)
-print("Экспорт завершен!")
+
+print("Export complete!")

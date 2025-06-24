@@ -12,7 +12,8 @@ pushd "../../scripts"
 popd
 
 for file in $MODEL_DIR/*.$MODEL_FORMAT; do
-    python $CONVERTER_NAME.py --model_path $file
+    echo $file
+    mo --input_model $file --output_dir $MODEL_DIR/openvino
 done
 
 exit 0

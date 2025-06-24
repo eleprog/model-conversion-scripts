@@ -4,23 +4,16 @@ cd ..
 
 if [ ! -d "./venv" ]; then
     echo "Warning: venv not install"
-    echo "Try install venv"
+    echo "Info: Try install venv"
 
     python3 -m venv venv
-    source ./venv/bin/activate
-
-    ########### install packets ###########
-    pip install torch
-    pip install onnx
-    pip install torchlibrosa
-    ########### install packets ###########
-else
-    source ./venv/bin/activate
 fi
 
-
+source ./venv/bin/activate
 
 if [[ "$VIRTUAL_ENV" != "" ]]; then
+    echo "Info: Check virtual environment dependency"
+    pip install -q -r $1
     echo "Info: Virtual environment activated"
 else
     echo "Error: Failed to activate virtual environment (try delete venv dir)"
