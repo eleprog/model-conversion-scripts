@@ -13,7 +13,7 @@ popd
 
 for file in $MODEL_DIR/*.$MODEL_FORMAT; do
     echo $file
-    mo --input_model $file --output_dir $MODEL_DIR/openvino
+    ovc $file --output_model $MODEL_DIR/openvino --compress_to_fp16=False
 done
 
 exit 0
