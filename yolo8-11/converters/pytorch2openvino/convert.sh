@@ -3,6 +3,7 @@ set -e
 
 pwd=$PWD
 
+CONVERTER_NAME="$(basename "$pwd")"
 MODEL_DIR="../../models"
 MODEL_FORMAT="pt"
 
