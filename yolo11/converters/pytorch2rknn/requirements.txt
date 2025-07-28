@@ -1,0 +1,13 @@
+numpy
+torch
+opencv-python
+psutil
+Pillow
+matplotlib
+PyYAML
+tqdm
+torchvision
+requests
+onnx
+scipy
+onnxruntime
